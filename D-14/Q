@@ -1,0 +1,46 @@
+Problem: Write a program to check whether a given square matrix is an Identity Matrix. An identity matrix is a square matrix in which all diagonal elements are 1 and all non-diagonal elements are 0.
+
+#include <stdio.h>
+
+int main() {
+    int n, i, j;
+
+    printf("Enter order of square matrix: ");
+    scanf("%d", &n);
+
+    int matrix[n][n];
+    int identity = 1;
+
+    printf("Enter matrix elements:\n");
+
+    // Input matrix
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    // Check identity matrix condition
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+
+            if(i == j) {
+                // Diagonal elements must be 1
+                if(matrix[i][j] != 1)
+                    identity = 0;
+            } else {
+                // Non-diagonal elements must be 0
+                if(matrix[i][j] != 0)
+                    identity = 0;
+            }
+        }
+    }
+
+    // Output result
+    if(identity)
+        printf("Matrix is an Identity Matrix\n");
+    else
+        printf("Matrix is NOT an Identity Matrix\n");
+
+    return 0;
+}
