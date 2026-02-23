@@ -1,0 +1,112 @@
+Problem :- Merge Two Sorted Linked Lists - Implement using linked list with dynamic memory allocation.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure of Node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create new node (Dynamic memory allocation)
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Insert at end
+void insertEnd(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+// Merge two sorted linked lists
+struct Node* mergeLists(struct Node* l1, struct Node* l2) {
+
+    struct Node* result = NULL;
+    struct Node* tail = NULL;
+
+    while (l1 != NULL && l2 != NULL) {
+
+        struct Node* temp;
+
+        if (l1->data <= l2->data) {
+            temp = createNode(l1->data);
+            l1 = l1->next;
+        } else {
+            temp = createNode(l2->data);
+            l2 = l2->next;
+        }
+
+        if (result == NULL) {
+            result = tail = temp;
+        } else {
+            tail->next = temp;
+            tail = temp;
+        }
+    }
+
+    // Remaining nodes
+    while (l1 != NULL) {
+        tail->next = createNode(l1->data);
+        tail = tail->next;
+        l1 = l1->next;
+    }
+
+    while (l2 != NULL) {
+        tail->next = createNode(l2->data);
+        tail = tail->next;
+        l2 = l2->next;
+    }
+
+    return result;
+}
+
+// Display list
+void display(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function
+int main() {
+    struct Node *list1 = NULL, *list2 = NULL, *merged = NULL;
+
+    // Example input
+    insertEnd(&list1, 1);
+    insertEnd(&list1, 3);
+    insertEnd(&list1, 5);
+
+    insertEnd(&list2, 2);
+    insertEnd(&list2, 4);
+    insertEnd(&list2, 6);
+
+    printf("List 1: ");
+    display(list1);
+
+    printf("List 2: ");
+    display(list2);
+
+    merged = mergeLists(list1, list2);
+
+    printf("Merged List: ");
+    display(merged);
+
+    return 0;
+}
