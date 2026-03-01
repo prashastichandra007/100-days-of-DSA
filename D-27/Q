@@ -1,0 +1,125 @@
+Problem: Find Intersection Point of Two Linked Lists - Implement using linked list with dynamic memory allocation.
+
+Solution:- 
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Create new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Insert at end
+void insertEnd(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+// Get length of linked list
+int getLength(struct Node* head) {
+    int count = 0;
+    while (head != NULL) {
+        count++;
+        head = head->next;
+    }
+    return count;
+}
+
+// Find intersection point
+struct Node* findIntersection(struct Node* head1, struct Node* head2) {
+    int len1 = getLength(head1);
+    int len2 = getLength(head2);
+
+    int diff;
+
+    // Move pointer of longer list ahead
+    if (len1 > len2) {
+        diff = len1 - len2;
+        while (diff--)
+            head1 = head1->next;
+    } else {
+        diff = len2 - len1;
+        while (diff--)
+            head2 = head2->next;
+    }
+
+    // Traverse together
+    while (head1 != NULL && head2 != NULL) {
+        if (head1 == head2)   // Compare addresses
+            return head1;
+
+        head1 = head1->next;
+        head2 = head2->next;
+    }
+
+    return NULL;
+}
+
+// Display list
+void display(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Driver code
+int main() {
+    struct Node* head1 = NULL;
+    struct Node* head2 = NULL;
+
+    // Common part
+    struct Node* common = createNode(30);
+    common->next = createNode(40);
+    common->next->next = createNode(50);
+
+    // First list
+    insertEnd(&head1, 10);
+    insertEnd(&head1, 20);
+
+    // Attach common part
+    struct Node* temp = head1;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = common;
+
+    // Second list
+    insertEnd(&head2, 15);
+    head2->next->next = common;
+
+    printf("List 1:\n");
+    display(head1);
+
+    printf("List 2:\n");
+    display(head2);
+
+    struct Node* intersection = findIntersection(head1, head2);
+
+    if (intersection)
+        printf("Intersection Point = %d\n", intersection->data);
+    else
+        printf("No Intersection\n");
+
+    return 0;
+}
