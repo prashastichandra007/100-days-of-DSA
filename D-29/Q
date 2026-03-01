@@ -1,0 +1,106 @@
+Problem: Rotate Linked List Right by k Places - Implement using linked list with dynamic memory allocation.
+
+Solution:- 
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Create new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Insert at end
+void insertEnd(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+// Get length of list
+int getLength(struct Node* head) {
+    int count = 0;
+    while (head != NULL) {
+        count++;
+        head = head->next;
+    }
+    return count;
+}
+
+// Rotate list right by k places
+void rotateRight(struct Node** head, int k) {
+    if (*head == NULL || k == 0)
+        return;
+
+    int len = getLength(*head);
+    k = k % len;   // Handle large k
+
+    if (k == 0)
+        return;
+
+    struct Node* temp = *head;
+    int steps = len - k - 1;
+
+    // Move to new last node
+    for (int i = 0; i < steps; i++)
+        temp = temp->next;
+
+    struct Node* newHead = temp->next;
+    temp->next = NULL;
+
+    // Go to end of new list
+    struct Node* tail = newHead;
+    while (tail->next != NULL)
+        tail = tail->next;
+
+    tail->next = *head;
+    *head = newHead;
+}
+
+// Display linked list
+void display(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+
+// Driver code
+int main() {
+    struct Node* head = NULL;
+
+    insertEnd(&head, 10);
+    insertEnd(&head, 20);
+    insertEnd(&head, 30);
+    insertEnd(&head, 40);
+    insertEnd(&head, 50);
+
+    printf("Original List:\n");
+    display(head);
+
+    rotateRight(&head, 2);
+
+    printf("After Rotation:\n");
+    display(head);
+
+    return 0;
+}
