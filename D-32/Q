@@ -1,0 +1,71 @@
+Problem: Implement push and pop operations on a stack and verify stack operations.
+Solution: #include <stdio.h>
+
+#define SIZE 5
+
+int stack[SIZE];
+int top = -1;
+
+// Push operation
+void push(int value) {
+    if (top == SIZE - 1) {
+        printf("❌ Stack Overflow! Cannot push %d\n", value);
+        return;
+    }
+    stack[++top] = value;
+    printf("✅ %d pushed into stack\n", value);
+}
+
+// Pop operation
+void pop() {
+    if (top == -1) {
+        printf("❌ Stack Underflow! Cannot pop\n");
+        return;
+    }
+    printf("🗑️ %d popped from stack\n", stack[top--]);
+}
+
+// Display stack
+void display() {
+    if (top == -1) {
+        printf("⚠️ Stack is empty\n");
+        return;
+    }
+
+    printf("📚 Current Stack (top → bottom):\n");
+    for (int i = top; i >= 0; i--) {
+        printf("| %d |\n", stack[i]);
+    }
+}
+
+// Verification function
+void verify() {
+    if (top == -1)
+        printf("🔎 Stack Status: EMPTY\n");
+    else if (top == SIZE - 1)
+        printf("🔎 Stack Status: FULL\n");
+    else
+        printf("🔎 Stack Status: PARTIALLY FILLED\n");
+}
+
+int main() {
+    // Testing stack operations
+    push(10);
+    push(20);
+    push(30);
+
+    display();
+    verify();
+
+    pop();
+    display();
+    verify();
+
+    pop();
+    pop();
+    pop();  // extra pop to test underflow
+
+    verify();
+
+    return 0;
+}
